@@ -1,0 +1,48 @@
+[2026-11-07T20:55:58] [LINT] [INFO] Starting Gate 1: Lint (Checkstyle)
+[2026-11-07T20:55:58] [LINT] [INFO] Project directory: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A
+[2026-11-07T20:55:58] [LINT] [INFO] Checkstyle config: .harness/checkstyle.xml
+[2026-11-07T20:55:58] [LINT] [INFO] ---
+[2026-11-07T20:55:58] [LINT] [INFO] Running: mvn checkstyle:check
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------< com.stravamirror:strava-activity-mirror >---------------
+[INFO] Building Strava Activity Mirror 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (default-cli) @ strava-activity-mirror ---
+[INFO] Starting audit...
+[WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:4:8: Unused import - jakarta.persistence.EntityManager. [UnusedImports]
+[WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:5:8: Unused import - jakarta.persistence.PersistenceContext. [UnusedImports]
+[WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:7:8: Unused import - java.util.List. [UnusedImports]
+[WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:4:8: Unused import - jakarta.persistence.EntityManager. [UnusedImports]
+[WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:5:8: Unused import - jakarta.persistence.PersistenceContext. [UnusedImports]
+Audit done.
+[WARNING] src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:[4,8] (imports) UnusedImports: Unused import - jakarta.persistence.EntityManager.
+[WARNING] src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:[5,8] (imports) UnusedImports: Unused import - jakarta.persistence.PersistenceContext.
+[WARNING] src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:[7,8] (imports) UnusedImports: Unused import - java.util.List.
+[WARNING] src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:[4,8] (imports) UnusedImports: Unused import - jakarta.persistence.EntityManager.
+[WARNING] src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:[5,8] (imports) UnusedImports: Unused import - jakarta.persistence.PersistenceContext.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.987 s
+[INFO] Finished at: 2026-11-07T20:56:03+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:check (default-cli) on project strava-activity-mirror: You have 5 Checkstyle violations. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[2026-11-07T20:56:03] [LINT] [INFO] ---
+[2026-11-07T20:56:04] [LINT] [ERROR] Result: FAIL — Checkstyle violations detected
+[2026-11-07T20:56:04] [LINT] [ERROR] Violations found:
+[2026-11-07T20:56:04] [LINT] [ERROR]   [WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:4:8: Unused import - jakarta.persistence.EntityManager. [UnusedImports]
+[2026-11-07T20:56:04] [LINT] [ERROR]   [WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:5:8: Unused import - jakarta.persistence.PersistenceContext. [UnusedImports]
+[2026-11-07T20:56:04] [LINT] [ERROR]   [WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepository.java:7:8: Unused import - java.util.List. [UnusedImports]
+[2026-11-07T20:56:04] [LINT] [ERROR]   [WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:4:8: Unused import - jakarta.persistence.EntityManager. [UnusedImports]
+[2026-11-07T20:56:04] [LINT] [ERROR]   [WARN] D:\WORKSPACE_BITS_WILP\Academics\SEM-1\02-AI-Augmented-SDLC-SE-ZG534\Assignments\AI-SDLC-ASG-1\Part-1A\src\main\java\com\stravamirror\repository\ActivitySummaryRepositoryImpl.java:5:8: Unused import - jakarta.persistence.PersistenceContext. [UnusedImports]
+[2026-11-07T20:56:04] [LINT] [INFO] Evidence saved: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A/evidence/independent-harness-logs/gate-1-lint-20261107-205558.log
+[2026-11-07T20:56:04] [LINT] [INFO] Result saved: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A/evidence/harness-results/gate-1-lint-20261107-205558.result
