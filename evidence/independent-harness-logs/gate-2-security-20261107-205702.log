@@ -1,0 +1,84 @@
+[2026-11-07T20:57:02] [SECURITY] [INFO] Starting Gate 2: Security (SpotBugs + Find Security Bugs)
+[2026-11-07T20:57:02] [SECURITY] [INFO] Project directory: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A
+[2026-11-07T20:57:02] [SECURITY] [INFO] SpotBugs threshold: Medium
+[2026-11-07T20:57:02] [SECURITY] [INFO] Exclude filter: .harness/spotbugs-exclude.xml
+[2026-11-07T20:57:03] [SECURITY] [INFO] ---
+[2026-11-07T20:57:03] [SECURITY] [INFO] Running: mvn compile spotbugs:check
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------< com.stravamirror:strava-activity-mirror >---------------
+[INFO] Building Strava Activity Mirror 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (prepare-agent) @ strava-activity-mirror ---
+[INFO] argLine set to -javaagent:C:\\Users\\mridu\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=D:\\WORKSPACE_BITS_WILP\\Academics\\SEM-1\\02-AI-Augmented-SDLC-SE-ZG534\\Assignments\\AI-SDLC-ASG-1\\Part-1A\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ strava-activity-mirror ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ strava-activity-mirror ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] >>> spotbugs:4.9.1.0:check (default-cli) > :spotbugs @ strava-activity-mirror >>>
+[INFO] 
+[INFO] --- spotbugs:4.9.1.0:spotbugs (spotbugs) @ strava-activity-mirror ---
+[INFO] Fork Value is true
+     [java] The following classes needed for analysis were missing:
+     [java]   equals
+     [java]   hashCode
+     [java]   toString
+     [java]   makeConcatWithConstants
+     [java]   apply
+[INFO] Done SpotBugs Analysis....
+[INFO] 
+[INFO] <<< spotbugs:4.9.1.0:check (default-cli) < :spotbugs @ strava-activity-mirror <<<
+[INFO] 
+[INFO] 
+[INFO] --- spotbugs:4.9.1.0:check (default-cli) @ strava-activity-mirror ---
+[INFO] BugInstance size is 5
+[INFO] Error size is 0
+[INFO] Total bugs: 5
+[ERROR] Medium: new com.stravamirror.client.StravaClient(RestClient) may expose internal representation by storing an externally mutable object into StravaClient.restClient [com.stravamirror.client.StravaClient] At StravaClient.java:[line 17] EI_EXPOSE_REP2
+[ERROR] Medium: com.stravamirror.dto.ActivityListResponse.activities() may expose internal representation by returning ActivityListResponse.activities [com.stravamirror.dto.ActivityListResponse] At ActivityListResponse.java:[line 5] EI_EXPOSE_REP
+[ERROR] Medium: new com.stravamirror.dto.ActivityListResponse(List, long, int, int, boolean) may expose internal representation by storing an externally mutable object into ActivityListResponse.activities [com.stravamirror.dto.ActivityListResponse] At ActivityListResponse.java:[line 5] EI_EXPOSE_REP2
+[ERROR] Medium: new com.stravamirror.repository.ActivitySummaryRepositoryImpl(JdbcTemplate) may expose internal representation by storing an externally mutable object into ActivitySummaryRepositoryImpl.jdbcTemplate [com.stravamirror.repository.ActivitySummaryRepositoryImpl] At ActivitySummaryRepositoryImpl.java:[line 17] EI_EXPOSE_REP2
+[ERROR] Medium: new com.stravamirror.service.ActivityService(StravaClient, ActivitySummaryRepository, ActivityDetailRepository, ObjectMapper) may expose internal representation by storing an externally mutable object into ActivityService.objectMapper [com.stravamirror.service.ActivityService] At ActivityService.java:[line 39] EI_EXPOSE_REP2
+[INFO] 
+
+
+To see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"
+
+
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16.989 s
+[INFO] Finished at: 2026-11-07T20:57:22+05:30
+[INFO] ------------------------------------------------------------------------
+[WARNING] 
+[WARNING] Plugin validation issues were detected in 1 plugin(s)
+[WARNING] 
+[WARNING]  * com.github.spotbugs:spotbugs-maven-plugin:4.9.1.0
+[WARNING] 
+[WARNING] For more or less details, use 'maven.plugin.validation' property with one of the values (case insensitive): [BRIEF, DEFAULT, VERBOSE]
+[WARNING] 
+[ERROR] Failed to execute goal com.github.spotbugs:spotbugs-maven-plugin:4.9.1.0:check (default-cli) on project strava-activity-mirror: failed with 5 bugs and 0 errors -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+[2026-11-07T20:57:22] [SECURITY] [INFO] ---
+[2026-11-07T20:57:22] [SECURITY] [ERROR] Result: FAIL — 5 SpotBugs finding(s) detected
+[2026-11-07T20:57:22] [SECURITY] [ERROR] Findings:
+[2026-11-07T20:57:22] [SECURITY] [ERROR]   [ERROR] Medium: new com.stravamirror.client.StravaClient(RestClient) may expose internal representation by storing an externally mutable object into StravaClient.restClient [com.stravamirror.client.StravaClient] At StravaClient.java:[line 17] EI_EXPOSE_REP2
+[2026-11-07T20:57:23] [SECURITY] [ERROR]   [ERROR] Medium: com.stravamirror.dto.ActivityListResponse.activities() may expose internal representation by returning ActivityListResponse.activities [com.stravamirror.dto.ActivityListResponse] At ActivityListResponse.java:[line 5] EI_EXPOSE_REP
+[2026-11-07T20:57:23] [SECURITY] [ERROR]   [ERROR] Medium: new com.stravamirror.dto.ActivityListResponse(List, long, int, int, boolean) may expose internal representation by storing an externally mutable object into ActivityListResponse.activities [com.stravamirror.dto.ActivityListResponse] At ActivityListResponse.java:[line 5] EI_EXPOSE_REP2
+[2026-11-07T20:57:23] [SECURITY] [ERROR]   [ERROR] Medium: new com.stravamirror.repository.ActivitySummaryRepositoryImpl(JdbcTemplate) may expose internal representation by storing an externally mutable object into ActivitySummaryRepositoryImpl.jdbcTemplate [com.stravamirror.repository.ActivitySummaryRepositoryImpl] At ActivitySummaryRepositoryImpl.java:[line 17] EI_EXPOSE_REP2
+[2026-11-07T20:57:23] [SECURITY] [ERROR]   [ERROR] Medium: new com.stravamirror.service.ActivityService(StravaClient, ActivitySummaryRepository, ActivityDetailRepository, ObjectMapper) may expose internal representation by storing an externally mutable object into ActivityService.objectMapper [com.stravamirror.service.ActivityService] At ActivityService.java:[line 39] EI_EXPOSE_REP2
+[2026-11-07T20:57:23] [SECURITY] [INFO] Evidence saved: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A/evidence/independent-harness-logs/gate-2-security-20261107-205702.log
+[2026-11-07T20:57:23] [SECURITY] [INFO] Result saved: /d/WORKSPACE_BITS_WILP/Academics/SEM-1/02-AI-Augmented-SDLC-SE-ZG534/Assignments/AI-SDLC-ASG-1/Part-1A/evidence/harness-results/gate-2-security-20261107-205702.result
