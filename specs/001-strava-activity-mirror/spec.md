@@ -10,6 +10,18 @@
 Postgres database and serve them locally, with manual sync, date-range
 listing, and local-first detail retrieval.
 
+## Clarifications
+
+### Session 2026-11-07
+
+- Q: Are `after`/`before` filters exclusive or inclusive? → A: Both
+  exclusive (`start_time > after AND start_time < before`), matching
+  Strava's API semantics. Applies to both sync pass-through and local
+  list queries.
+- Q: Should the list response include pagination metadata? → A: Yes —
+  include `total_count`, `page`, `per_page`, and `has_next` fields
+  alongside the activity items.
+
 ## User Scenarios & Testing
 
 ### User Story 1 — Sync Activity Summaries from Strava (Priority: P1)
@@ -128,11 +140,13 @@ The athlete queries stored activity summaries using the same parameter
 shape as sync: `after`, `before`, `page`, `per_page`. The response is
 built entirely from the local database. Strava is never called.
 
-Results are filtered by stored start time, ordered newest-first, with a
-stable tiebreaker (descending activity ID) for equal start times. Each
-item includes the activity ID, start time, and stored summary JSON.
-Paging defaults to page 1 with 30 items per page; the maximum
-`per_page` is 200.
+Results are filtered by stored start time using exclusive boundaries
+(`start_time > after AND start_time < before`), ordered newest-first,
+with a stable tiebreaker (descending activity ID) for equal start times.
+Each item includes the activity ID, start time, and stored summary JSON.
+The response also includes pagination metadata: `total_count`, `page`,
+`per_page`, and `has_next`. Paging defaults to page 1 with 30 items per
+page; the maximum `per_page` is 200.
 
 **Why this priority**: Querying stored data is the primary read path
 and the prerequisite for all downstream features (e.g. AI insights).
@@ -195,6 +209,33 @@ any Strava stub.
     **When** the request is processed,
     **Then** the response status is 400 with code `VALIDATION_ERROR`,
     and Strava was called exactly 0 times.
+
+11. **Given** the database contains an activity with start time exactly
+    equal to the `after` value (exclusive boundary),
+    **When** the athlete requests a list with that `after` value,
+    **Then** that activity is NOT included in the results (exclusive
+    filter), and Strava was called exactly 0 times.
+
+12. **Given** the database contains an activity with start time exactly
+    equal to the `before` value (exclusive boundary),
+    **When** the athlete requests a list with that `before` value,
+    **Then** that activity is NOT included in the results (exclusive
+    filter), and Strava was called exactly 0 times.
+
+13. **Given** the database contains 5 activities,
+    **When** the athlete requests page 1 with `per_page=2`,
+    **Then** the response includes `total_count=5`, `page=1`,
+    `per_page=2`, `has_next=true`, and exactly 2 activities.
+
+14. **Given** the database contains 5 activities,
+    **When** the athlete requests page 3 with `per_page=2`,
+    **Then** the response includes `total_count=5`, `page=3`,
+    `per_page=2`, `has_next=false`, and exactly 1 activity.
+
+15. **Given** the database is empty,
+    **When** the athlete requests a list,
+    **Then** the response includes `total_count=0`, `page=1`,
+    `has_next=false`, and an empty activities list.
 
 ---
 
@@ -357,8 +398,9 @@ no partial record is stored.
 
 - **FR-008**: System MUST accept list requests with optional `after`,
   `before` (epoch timestamps), `page`, and `per_page` parameters.
-- **FR-009**: List results MUST be filtered by stored start time and
-  ordered newest-first, with descending activity ID as a stable
+- **FR-009**: List results MUST be filtered by stored start time using
+  exclusive boundaries (`start_time > after AND start_time < before`)
+  and ordered newest-first, with descending activity ID as a stable
   tiebreaker for equal start times.
 - **FR-010**: List paging MUST default to page 1 with 30 items per
   page; `per_page` MUST NOT exceed 200. Invalid values MUST be
@@ -368,7 +410,11 @@ no partial record is stored.
 - **FR-012**: List requests MUST NOT call the Strava API under any
   circumstances.
 - **FR-013**: Each returned list item MUST include the activity ID,
-  start time, and stored summary JSON.
+  start time, and stored summary JSON. The list response MUST also
+  include pagination metadata: `total_count` (total matching activities
+  across all pages), `page` (current page number), `per_page` (page
+  size used), and `has_next` (boolean indicating whether more pages
+  exist).
 
 **Get-Detail Capability**
 
@@ -466,7 +512,9 @@ still triggers a Strava fetch for the detail.
   system does not partition data by athlete.
 - **Epoch timestamps**: `after` and `before` are Unix epoch seconds
   (non-negative integers). When both are provided, `after` MUST be
-  strictly less than `before`.
+  strictly less than `before`. Both boundaries are exclusive: the filter
+  matches activities with `start_time > after AND start_time < before`,
+  consistent with Strava's API semantics.
 - **Tiebreaker ordering**: When multiple activities share the same
   start time, descending Strava activity ID is used as the tiebreaker
   to guarantee deterministic ordering.

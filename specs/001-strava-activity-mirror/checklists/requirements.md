@@ -34,11 +34,13 @@ proceeding to planning
 
 ## Notes
 
-- All 12 checklist items pass validation.
-- 25 functional requirements (FR-001 through FR-025) with 42 acceptance
+- All 16 checklist items pass validation (16/16).
+- 25 functional requirements (FR-001 through FR-025) with 47 acceptance
   scenarios across 3 user stories and 7 edge cases.
-- Zero [NEEDS CLARIFICATION] markers — the feature description was
-  sufficiently detailed to fill all requirements without ambiguity.
+- Post-clarification (2026-11-07): 2 ambiguities resolved — exclusive
+  boundary semantics for after/before filters, and pagination metadata
+  in list responses. 5 new acceptance scenarios added (boundary
+  conditions and pagination metadata).
 - HTTP status codes and JSON format are treated as API contract
   (observable behavior), not implementation details, since the service
   IS an HTTP API and the user explicitly requested these in acceptance
