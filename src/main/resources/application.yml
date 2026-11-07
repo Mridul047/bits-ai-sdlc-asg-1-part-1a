@@ -9,6 +9,8 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
 strava:
   access-token: ${STRAVA_ACCESS_TOKEN}

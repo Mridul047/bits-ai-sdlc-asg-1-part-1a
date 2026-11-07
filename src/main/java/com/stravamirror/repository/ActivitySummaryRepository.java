@@ -14,8 +14,8 @@ import org.springframework.data.repository.query.Param;
 public interface ActivitySummaryRepository extends JpaRepository<ActivitySummary, Long>, ActivitySummaryRepositoryCustom {
 
     @Query("SELECT a FROM ActivitySummary a WHERE "
-            + "(:after IS NULL OR a.startDate > :after) AND "
-            + "(:before IS NULL OR a.startDate < :before) "
+            + "a.startDate > :after AND "
+            + "a.startDate < :before "
             + "ORDER BY a.startDate DESC, a.activityId DESC")
     Page<ActivitySummary> findByDateRange(
             @Param("after") Instant after,

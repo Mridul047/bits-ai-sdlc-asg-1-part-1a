@@ -62,8 +62,8 @@ public class ActivityService {
 
     @Transactional(readOnly = true)
     public ActivityListResponse listActivities(Long after, Long before, int page, int perPage) {
-        Instant afterInstant = (after != null) ? Instant.ofEpochSecond(after) : null;
-        Instant beforeInstant = (before != null) ? Instant.ofEpochSecond(before) : null;
+        Instant afterInstant = (after != null) ? Instant.ofEpochSecond(after) : Instant.EPOCH;
+        Instant beforeInstant = (before != null) ? Instant.ofEpochSecond(before) : Instant.parse("9999-12-31T23:59:59Z");
 
         Pageable pageable = PageRequest.of(page - 1, perPage);
         Page<ActivitySummary> resultPage = summaryRepository.findByDateRange(afterInstant, beforeInstant, pageable);
