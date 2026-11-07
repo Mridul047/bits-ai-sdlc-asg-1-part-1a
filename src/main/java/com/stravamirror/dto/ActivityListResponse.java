@@ -9,4 +9,7 @@ public record ActivityListResponse(
     int perPage,
     boolean hasNext
 ) {
+    public ActivityListResponse {
+        activities = List.copyOf(activities);
+    }
 }

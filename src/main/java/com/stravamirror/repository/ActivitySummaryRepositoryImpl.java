@@ -1,8 +1,6 @@
 package com.stravamirror.repository;
 
 import com.stravamirror.entity.ActivitySummary;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.sql.Timestamp;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;

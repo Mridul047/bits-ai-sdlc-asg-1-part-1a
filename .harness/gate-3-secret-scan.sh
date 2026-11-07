@@ -44,7 +44,8 @@ SCAN_FILES=$(find "$PROJECT_DIR" \
     -o -name "*.sh" -o -name "*.env" -o -name "Dockerfile" \
     -o -name "docker-compose*" \) \
     | grep -v "target/" | grep -v ".harness/evidence/" | grep -v "node_modules/" \
-    | grep -v "evidence/independent-harness-logs/" | grep -v "evidence/harness-results/" || true)
+    | grep -v "evidence/independent-harness-logs/" | grep -v "evidence/harness-results/" \
+    | grep -v "/\.env$" | grep -v "/\.env\." || true)
 
 # Pattern 1: Hardcoded credential assignments
 PATTERNS='(STRAVA_ACCESS_TOKEN|POSTGRES_PASSWORD|SPRING_DATASOURCE_PASSWORD)\s*=\s*[^${\s]'

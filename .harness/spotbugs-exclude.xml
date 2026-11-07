@@ -10,4 +10,21 @@
         <Class name="~com\.stravamirror\.repository\..*"/>
         <Bug pattern="SQL_INJECTION_SPRING_JDBC"/>
     </Match>
+
+    <!-- Exclude EI_EXPOSE_REP2 for Spring DI constructor injection of framework-managed singletons
+         (RestClient, JdbcTemplate, ObjectMapper). These cannot be defensive-copied and are
+         effectively immutable once injected by the container. -->
+    <Match>
+        <Class name="com.stravamirror.client.StravaClient"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Class name="com.stravamirror.repository.ActivitySummaryRepositoryImpl"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Class name="com.stravamirror.service.ActivityService"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Field name="objectMapper"/>
+    </Match>
 </FindBugsFilter>

@@ -1,10 +1,7 @@
 package com.stravamirror.repository;
 
 import com.stravamirror.entity.ActivitySummary;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.time.Instant;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
