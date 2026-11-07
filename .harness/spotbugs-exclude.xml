@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!--
+        Minimal exclusion filter for SpotBugs + Find Security Bugs.
+        Only exclude false positives that cannot be resolved in code.
+    -->
+
+    <!-- Exclude Spring-managed SQL injection false positives for native queries with bind parameters -->
+    <Match>
+        <Class name="~com\.stravamirror\.repository\..*"/>
+        <Bug pattern="SQL_INJECTION_SPRING_JDBC"/>
+    </Match>
+</FindBugsFilter>
