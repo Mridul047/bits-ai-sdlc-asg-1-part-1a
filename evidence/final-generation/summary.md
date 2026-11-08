@@ -8,8 +8,8 @@
 | **Date** | 2026-11-07 |
 | **Spec** | `specs/001-strava-activity-mirror/spec.md` |
 | **Tasks file** | `specs/001-strava-activity-mirror/tasks.md` |
-| **Tasks completed** | T001–T041 (of T001–T044) |
-| **Pending tasks** | T042 (harness pass — now complete), T043 (traceability), T044 (quickstart) |
+| **Tasks completed** | T001–T044 (all complete) |
+| **Pending tasks** | None |
 
 ## Harness Run #2 Results (Post-fix)
 

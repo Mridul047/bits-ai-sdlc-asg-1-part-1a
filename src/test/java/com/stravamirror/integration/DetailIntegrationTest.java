@@ -40,7 +40,7 @@ class DetailIntegrationTest extends BaseIntegrationTest {
                     + "\"start_date\":\"2024-03-15T08:00:00Z\"}";
 
     @Test
-    @DisplayName("AC-3.1 FR-016: cache miss fetches from Strava, stores, and returns detail")
+    @DisplayName("AC-3.1 FR-014 FR-016: cache miss fetches from Strava, stores, and returns detail")
     void cacheMissFetchesAndStores() throws Exception {
         wireMock.stubFor(com.github.tomakehurst.wiremock.client.WireMock
                 .get(urlPathEqualTo("/api/v3/activities/500"))
@@ -77,7 +77,7 @@ class DetailIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("AC-3.3 FR-016: repeat request calls Strava only once total")
+    @DisplayName("AC-3.3 FR-017: subsequent detail served from local storage, Strava called at most once")
     void repeatRequestCallsStravaOnce() throws Exception {
         wireMock.stubFor(com.github.tomakehurst.wiremock.client.WireMock
                 .get(urlPathEqualTo("/api/v3/activities/700"))
@@ -98,7 +98,7 @@ class DetailIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("AC-3.7: Strava 404 returns ACTIVITY_NOT_FOUND, nothing stored")
+    @DisplayName("AC-3.7 FR-019: Strava 404 returns ACTIVITY_NOT_FOUND, nothing stored")
     void strava404ReturnsNotFound() throws Exception {
         wireMock.stubFor(com.github.tomakehurst.wiremock.client.WireMock
                 .get(urlPathEqualTo("/api/v3/activities/999"))
@@ -115,7 +115,7 @@ class DetailIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("AC-3.8: Strava 401 returns STRAVA_AUTH_ERROR")
+    @DisplayName("AC-3.8 FR-020: Strava 401 on detail returns STRAVA_AUTH_ERROR, nothing stored")
     void strava401ReturnsAuthError() throws Exception {
         wireMock.stubFor(com.github.tomakehurst.wiremock.client.WireMock
                 .get(urlPathEqualTo("/api/v3/activities/800"))

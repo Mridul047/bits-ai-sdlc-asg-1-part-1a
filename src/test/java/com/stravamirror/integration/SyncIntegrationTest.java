@@ -131,7 +131,7 @@ class SyncIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("AC-1.11 FR-022: Strava 401 returns STRAVA_AUTH_ERROR, zero stored")
+    @DisplayName("AC-1.11 FR-007 FR-022: Strava 401 returns STRAVA_AUTH_ERROR, zero stored")
     void strava401ReturnsAuthError() throws Exception {
         wireMock.stubFor(get(urlPathEqualTo("/api/v3/athlete/activities"))
                 .willReturn(aResponse().withStatus(401)));

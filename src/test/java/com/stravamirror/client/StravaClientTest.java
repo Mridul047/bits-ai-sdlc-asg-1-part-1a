@@ -57,7 +57,7 @@ class StravaClientTest {
         }
 
         @Test
-        @DisplayName("STRAVA_AUTH_ERROR: Strava 401 maps to STRAVA_AUTH_ERROR")
+        @DisplayName("FR-023: Strava 401 maps to distinct STRAVA_AUTH_ERROR code")
         void strava401MapsToAuthError() {
             com.github.tomakehurst.wiremock.client.WireMock.stubFor(
                     get(urlPathEqualTo("/api/v3/athlete/activities"))

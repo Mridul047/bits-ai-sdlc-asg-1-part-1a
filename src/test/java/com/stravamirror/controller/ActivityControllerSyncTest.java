@@ -43,12 +43,13 @@ class ActivityControllerSyncTest {
     }
 
     @Test
-    @DisplayName("FR-006: after=abc returns 400 VALIDATION_ERROR")
+    @DisplayName("FR-006 FR-021: after=abc returns 400 VALIDATION_ERROR with code and message")
     void nonNumericAfterReturns400() throws Exception {
         mockMvc.perform(post("/athlete/activities/sync")
                         .param("after", "abc"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+                .andExpect(jsonPath("$.message").isNotEmpty());
     }
 
     @Test

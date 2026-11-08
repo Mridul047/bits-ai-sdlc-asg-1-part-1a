@@ -151,9 +151,9 @@ failure tests, harness verification, coverage check.
 - [x] T039 [P] Write startup validation tests in `src/test/java/<base-package>/config/StartupValidationTest.java` — verify application refuses to start when `STRAVA_ACCESS_TOKEN` is missing or blank (EC-1, FR-024); verify application refuses to start when database URL is missing (EC-2, FR-025). Use `@SpringBootTest` with modified environment
 - [x] T040 [P] Write error response security tests in `src/test/java/<base-package>/exception/ErrorResponseSecurityTest.java` — for every error code in the error table, verify the response body does not contain the configured token value (EC-3) and does not contain a raw Strava response body (EC-4). Test display names include EC-3, EC-4
 - [x] T041 [P] Write database failure tests in `src/test/java/<base-package>/integration/DatabaseFailureTest.java` — simulate DB failure during sync → 500 `DATABASE_ERROR`, zero records stored (EC-5); DB failure during list → 500 `DATABASE_ERROR` (EC-6); DB failure during detail store → 500 `DATABASE_ERROR`, nothing stored (EC-7)
-- [ ] T042 Run `.harness/run.sh` end-to-end and fix any gate failures. Verify: (1) Checkstyle reports zero violations, (2) SpotBugs+FindSecBugs reports zero high/medium findings, (3) secret scan finds no secrets in committed files, (4) all tests pass with JaCoCo ≥80% line coverage
-- [ ] T043 Review all test names/display names to verify every FR-nnn and EC-n from the spec is covered by at least one test (Principle V traceability). Cross-reference against spec.md functional requirements FR-001 through FR-025 and edge cases EC-1 through EC-7
-- [ ] T044 Run quickstart.md validation scenarios A through I manually against the running application to confirm end-to-end behavior
+- [x] T042 Run `.harness/run.sh` end-to-end and fix any gate failures. Verify: (1) Checkstyle reports zero violations, (2) SpotBugs+FindSecBugs reports zero high/medium findings, (3) secret scan finds no secrets in committed files, (4) all tests pass with JaCoCo ≥80% line coverage
+- [x] T043 Review all test names/display names to verify every FR-nnn and EC-n from the spec is covered by at least one test (Principle V traceability). Cross-reference against spec.md functional requirements FR-001 through FR-025 and edge cases EC-1 through EC-7
+- [x] T044 Run quickstart.md validation scenarios A through I manually against the running application to confirm end-to-end behavior
 
 ---
 
