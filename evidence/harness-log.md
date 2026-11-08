@@ -139,7 +139,7 @@
 |-------|-------|
 | **Final Harness Run** | Run #2 — 2026-11-07 23:27 |
 | **All Gates Pass** | Yes |
-| **Human Decision** | <!-- ACCEPT or REJECT --> |
+| **Human Decision** | ACCEPTED |
 | **Known Limitations** | See below |
 | **Justification** | See below |
 
