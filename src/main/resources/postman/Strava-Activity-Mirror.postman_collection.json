@@ -1,0 +1,611 @@
+{
+	"info": {
+		"name": "Strava Activity Mirror",
+		"description": "API collection for the Strava Activity Mirror service.\n\nEndpoints:\n- POST /athlete/activities/sync — Sync activities from Strava\n- GET /athlete/activities — List stored activities\n- GET /activities/{id} — Get activity detail (local-first)\n\nSetup:\n1. Set the `base_url` variable (default: http://localhost:8080)\n2. Start the app with required env vars (STRAVA_ACCESS_TOKEN, DB credentials)\n3. Run Sync first to populate the database",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "activity_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Sync Activities",
+			"item": [
+				{
+					"name": "Sync — Default (page 1, 30 per page)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has sync counts', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('total');",
+									"    pm.expect(json).to.have.property('stored');",
+									"    pm.expect(json).to.have.property('skipped');",
+									"    pm.expect(json.total).to.eql(json.stored + json.skipped);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"]
+						}
+					}
+				},
+				{
+					"name": "Sync — With Pagination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has sync counts', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.total).to.be.at.most(5);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?page=1&per_page=5",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "5" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Sync — With Date Range",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?after=1730000000&before=1740000000&page=1&per_page=10",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "after", "value": "1730000000" },
+								{ "key": "before", "value": "1740000000" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Sync — Idempotent (re-sync same page)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('All activities skipped on re-sync', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.stored).to.eql(0);",
+									"    pm.expect(json.skipped).to.eql(json.total);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?page=1&per_page=5",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "5" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Sync — Validation: after > before",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"    pm.expect(json.message).to.include('after');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?after=2000&before=1000",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "after", "value": "2000" },
+								{ "key": "before", "value": "1000" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Sync — Validation: negative after",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?after=-1",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "after", "value": "-1" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Sync — Validation: per_page > 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities/sync?per_page=201",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities", "sync"],
+							"query": [
+								{ "key": "per_page", "value": "201" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "List Activities",
+			"item": [
+				{
+					"name": "List — Default (all activities)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has pagination metadata', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('activities');",
+									"    pm.expect(json).to.have.property('total_count');",
+									"    pm.expect(json).to.have.property('page');",
+									"    pm.expect(json).to.have.property('per_page');",
+									"    pm.expect(json).to.have.property('has_next');",
+									"});",
+									"",
+									"pm.test('Activities are sorted newest first', function () {",
+									"    var json = pm.response.json();",
+									"    if (json.activities.length > 1) {",
+									"        for (var i = 1; i < json.activities.length; i++) {",
+									"            pm.expect(json.activities[i-1].start_time >= json.activities[i].start_time).to.be.true;",
+									"        }",
+									"    }",
+									"});",
+									"",
+									"// Save first activity ID for detail request",
+									"if (pm.response.json().activities.length > 0) {",
+									"    pm.collectionVariables.set('activity_id', pm.response.json().activities[0].activity_id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities"]
+						}
+					}
+				},
+				{
+					"name": "List — With Pagination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Respects per_page limit', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.activities.length).to.be.at.most(2);",
+									"    pm.expect(json.per_page).to.eql(2);",
+									"    pm.expect(json.page).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities?page=1&per_page=2",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "2" }
+							]
+						}
+					}
+				},
+				{
+					"name": "List — With Date Filters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is valid', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('activities');",
+									"    pm.expect(json).to.have.property('total_count');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities?after=1730000000&before=1740000000",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities"],
+							"query": [
+								{ "key": "after", "value": "1730000000" },
+								{ "key": "before", "value": "1740000000" }
+							]
+						}
+					}
+				},
+				{
+					"name": "List — Empty Result (future dates)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Returns empty list, not error', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.activities).to.be.an('array').that.is.empty;",
+									"    pm.expect(json.total_count).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities?after=1900000000&before=1900100000",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities"],
+							"query": [
+								{ "key": "after", "value": "1900000000" },
+								{ "key": "before", "value": "1900100000" }
+							]
+						}
+					}
+				},
+				{
+					"name": "List — Validation: page < 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/athlete/activities?page=0",
+							"host": ["{{base_url}}"],
+							"path": ["athlete", "activities"],
+							"query": [
+								{ "key": "page", "value": "0" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Activity Detail",
+			"item": [
+				{
+					"name": "Detail — By ID (from collection variable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has detail fields', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('activity_id');",
+									"    pm.expect(json).to.have.property('start_time');",
+									"    pm.expect(json).to.have.property('detail');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/activities/{{activity_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["activities", "{{activity_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Detail — Cached (second call, local DB)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response served from local DB', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('activity_id');",
+									"    pm.expect(json).to.have.property('detail');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/activities/{{activity_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["activities", "{{activity_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Detail — Validation: negative ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"    pm.expect(json.message).to.include('positive');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/activities/-1",
+							"host": ["{{base_url}}"],
+							"path": ["activities", "-1"]
+						}
+					}
+				},
+				{
+					"name": "Detail — Validation: non-numeric ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Error code is VALIDATION_ERROR', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('VALIDATION_ERROR');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/activities/abc",
+							"host": ["{{base_url}}"],
+							"path": ["activities", "abc"]
+						}
+					}
+				},
+				{
+					"name": "Detail — Not Found on Strava",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test('Error code is ACTIVITY_NOT_FOUND', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json.code).to.eql('ACTIVITY_NOT_FOUND');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/activities/999999999",
+							"host": ["{{base_url}}"],
+							"path": ["activities", "999999999"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
