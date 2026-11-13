@@ -1,7 +1,6 @@
 # Strava Activity Mirror
 
-Reference implementation for **Assignment 1, Part 1A** of
-*AI-Augmented SDLC* (**SE ZG534**). The project demonstrates a
+The project demonstrates a
 spec-driven, quality-gated development workflow: a specification and
 constitution drive the code, and an automated harness enforces lint,
 security, secret-scan, and test gates.
